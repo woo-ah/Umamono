@@ -4,38 +4,71 @@ import { firebase } from '../config';
 import {useNavigation} from "@react-navigation/native"
 
 const Registration = () => {
+    const user = firebase.auth().currentUser;
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [nickName, setNickName] = useState('');
+    const [profileImages, setProfileImages] = useState('');
     const navigation = useNavigation()
+   
 
     
 
-   const registerUser = async (email, password, nickName) => {
-        
+    
+    loginUser = async(email,password) => {
+        try{
+            await firebase.auth().signInWithEmailAndPassword(email,password)
+        }catch(error){
+            alert(error.message)
+        }
+    }
 
-        await firebase.auth().createUserWithEmailAndPassword(email,password)
-        .then(() => {
-            firebase.auth().currentUser.sendEmailVerification({
-                handleCodeInApp: true,
-                url: 'https://umamono-66263.firebaseapp.com',
-            })
-                .then(() => {
-                    firebase.firestore().collection('users')
-                        .doc(firebase.auth().currentUser.uid)
-                        .set({
+    const registerUser = async (email, password, nickName) => {
+        try {
+            await firebase.auth().createUserWithEmailAndPassword(email, password)
+                .then(async () => {
+                    firebase.auth().currentUser.sendEmailVerification({
+                        handleCodeInApp: true,
+                        url: 'https://umamono-66263.firebaseapp.com',
+                    })
+                    .then(async () => {
+                        const uid = firebase.auth().currentUser.uid;
+    
+                        // 프로필 이미지 설정
+                        const defaultImageRef = firebase.storage().ref().child(`basicProfile.jpg`);
+                        const downloadURL = await defaultImageRef.getDownloadURL();
+                
+                        // 사용자의 프로필 이미지 업로드
+                        const userImageRef = firebase.storage().ref().child(`profileImages/${uid}`);
+                        const response = await fetch(downloadURL);
+                        const blob = await response.blob();
+                        await userImageRef.put(blob);
+                
+                        // Firestore에 이미지 URL 저장
+                        const userImageDownloadURL = await userImageRef.getDownloadURL();
+                        
+                        // Firestore에 사용자 정보 설정
+                        await firebase.firestore().collection('users').doc(uid).set({
                             nickName,
                             email,
-                        })
+                            profileImages: userImageDownloadURL, // Corrected this line  
+                        });
+    
+                        // 자동 로그인
+                        await loginUser(email, password);
+                    })
+                    .catch((error) => {
+                        alert(error.message);
+                    });
                 })
                 .catch((error) => {
-                    alert(error.message)
-                })
-        })
-        .catch((error) => {
-            alert(error.message);
-        });
-    }
+                    alert(error.message);
+                });
+        } catch (error) {
+            console.error("회원가입 중 에러:", error);
+        }
+    };
+    
 
     return (
         
@@ -46,6 +79,8 @@ const Registration = () => {
             <TouchableOpacity onPress={() => navigation.navigate('Login')} style={styles.backButton}>
                 <Text style={{ fontSize: 18, color: '#026efd' }}>Back to Login</Text>
             </TouchableOpacity>
+
+
             <View style={{ marginTop: 40 }}>
             <Text style={styles.label}>닉네임</Text>
             <TextInput
@@ -74,11 +109,10 @@ const Registration = () => {
                 />
             </View>
             <TouchableOpacity
-                onPress={()=>registerUser(email, password, nickName)}
-                // onPress={() => navigation.navigate('TermsOfUse', {  email, password ,nickName})}
+                onPress={() => { registerUser(email, password, nickName); }}
                 style={styles.button}
             >
-                <Text style={{ fontWeight: 'bold', fontSize: 22 , color: 'white'}}>
+                <Text style={{ fontWeight: 'bold', fontSize: 22, color: 'white' }}>
                     Register
                 </Text>
             </TouchableOpacity>

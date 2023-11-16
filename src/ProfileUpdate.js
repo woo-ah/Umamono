@@ -42,7 +42,7 @@ const ProfileUpdate = () => {
 
             // 이미지 URL을 Firestore에 저장
             await firebase.firestore().collection('users').doc(user.uid).update({
-                profileImage: downloadURL
+                profileImages: downloadURL
             });
         } catch (error) {
             console.error(error);

@@ -13,37 +13,30 @@ const Profile = ({ route }) => {
     const [name, setName] = useState('')
     const navigation = useNavigation()
 
-    // 프로필 이미지 업로드 함수
-    const uploadImage = async () => {
-        // 이미지 업로드 로직
-    }
 
-    const { updatedImage, updatedName } = route.params || {};
-
-    useEffect(() => {
-        if (updatedImage) {
-            setImage(updatedImage);
-        }
-        if (updatedName) {
-            setName(updatedName);
-        }
-    }, [updatedImage, updatedName]);
 
     useEffect(() => {
         // Firebase에서 사용자 정보 가져오기
         const fetchUserInfo = async () => {
             try {
-                const snapshot = await firebase.firestore().collection('users').doc(user.uid).get();
-                const data = snapshot.data();
-                setImage(data.profileImage);
-                setName(data.nickName); // 사용자 이름 설정
+                const currentUser = firebase.auth().currentUser;
+    
+                if (currentUser) {
+                    const snapshot = await firebase.firestore().collection('users').doc(currentUser.uid).get();
+                    const data = snapshot.data();
+                    setName(data.nickName); // 사용자 이름 설정
+                    setImage(data.profileImages); // 프로필 이미지 설정
+                } else {
+                    console.error("User not available.");
+                }
             } catch (error) {
                 console.error(error);
             }
         };
-
+    
         fetchUserInfo();
     }, []);
+    
 
  
 
@@ -56,21 +49,13 @@ const Profile = ({ route }) => {
                 프로필
             </Text>
             <View style={styles.photo}>
-            <TouchableOpacity onPress={uploadImage}>
+            <TouchableOpacity>
             <Image source={{ uri: image }} style={{ width: 100, height: 100, borderRadius: 20 }} />
-                {/* {image ? (
-                    <Image source={{ uri: image }} style={{ width: 100, height: 100, borderRadius: 20 }} />
-                ) : (
-                    <View style={{ width: 100, height: 100, borderRadius: 20, backgroundColor: '#ddd', justifyContent: 'center', alignItems: 'center' }}>
-                        <Text>사진 업로드</Text>
-                    </View>
-                )} */}
+                
             </TouchableOpacity>
             </View>
             <Text style={styles.name}>{name} </Text> 
-            {/* <TouchableOpacity onPress={() => navigation.navigate('ProfileUpdate')}>
-                    <Icon name="pencil" size={20} color="#000" />
-                </TouchableOpacity> */}
+           
           
             <TouchableOpacity
                onPress={() => navigation.navigate('ProfileUpdate')} 
