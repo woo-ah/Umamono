@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'reac
 import * as ImagePicker from 'expo-image-picker';
 import { firebase } from '../config';
 import {useNavigation} from "@react-navigation/native"
+import * as ImageManipulator from 'expo-image-manipulator';
 
 const ProfileUpdate = () => {
     const user = firebase.auth().currentUser;
@@ -31,7 +32,13 @@ const ProfileUpdate = () => {
             }
 
             const { uri } = pickerResult.assets[0];
-            const response = await fetch(uri);
+            // 이미지 리사이즈
+            const resizedImage = await ImageManipulator.manipulateAsync(
+                uri,
+                [{ resize: { width: 500 } }], // 원하는 픽셀 크기 설정
+                { compress: 0.7, format: ImageManipulator.SaveFormat.JPEG } // 원하는 품질 설정
+            );
+            const response = await fetch(resizedImage.uri);
             const blob = await response.blob();
 
             const ref = firebase.storage().ref().child(`profileImages/${user.uid}`);
