@@ -108,11 +108,11 @@ const TabBarCustomComponent = ({ state, descriptors, navigation }) => {
           <Text>카테고리</Text>
         </TouchableOpacity>
     
-        <TouchableOpacity
+        <View
           style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center', marginTop: -15, paddingHorizontal: 0 }}
           >
           <Image source={LogoImage} style={{ width: 60, height: 60 }} />
-        </TouchableOpacity>
+        </View>
 
         <TouchableOpacity
           onPress={() => navigation.navigate('ProfileScreen')}
