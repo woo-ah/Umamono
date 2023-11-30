@@ -73,6 +73,16 @@ const Profile = ({ route }) => {
             >
                 <Text style={{fontSize: 22, fontWeight: 'bold'}}>Sign out</Text>
             </TouchableOpacity> */}
+            
+            <TouchableOpacity
+                onPress={()=> { 
+                
+                    navigation.navigate('ConvienceStore'); // 로그아웃 후 로그인 화면으로 이동
+                }}
+                style={styles.button}
+            >
+                <Text style={{fontSize: 22, fontWeight: 'bold'}}>ConvienceStore</Text>
+            </TouchableOpacity>
         </View>
     );
 };

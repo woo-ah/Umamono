@@ -11,8 +11,8 @@ import Profile from "./src/Profile";
 import TermsOfUse from "./src/TermsOfUse";
 import 'expo-dev-client';
 import ProfileUpdate from "./src/ProfileUpdate";
-
-
+import ConvienceStore from "./src/ConvienceStore";
+import FoodDetail from "./src/FoodDetail";
 
 const Stack = createStackNavigator();
 
@@ -116,6 +116,19 @@ function App(){
       component={ProfileUpdate}
       options={{ headerShown: false }}
     />
+
+    <Stack.Screen
+      name="ConvienceStore"
+      component={ConvienceStore}
+      options={{ headerShown: false }}
+    />
+
+    <Stack.Screen
+      name="FoodDetail"
+      component={FoodDetail}
+      options={{ headerShown: false }}
+    />
+
 
         
     </Stack.Navigator>

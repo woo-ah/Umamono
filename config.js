@@ -1,11 +1,13 @@
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
+import { getDatabase } from 'firebase/database';
 
 
 const firebaseConfig = {
     apiKey: "AIzaSyALpQI-rOmW8v2ViHB8GBucD3NZRFc17Jw",
     authDomain: "umamono-66263.firebaseapp.com",
+    databaseURL: "https://umamono-66263-default-rtdb.asia-southeast1.firebasedatabase.app",
     projectId: "umamono-66263",
     storageBucket: "umamono-66263.appspot.com",
     messagingSenderId: "890378408228",
@@ -18,4 +20,6 @@ if(!firebase.apps.length){
 }
 
 
+const db = getDatabase();
+export {db};
 export {firebase};
