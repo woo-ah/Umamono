@@ -6,8 +6,18 @@ import 'firebase/compat/storage';
 import { useNavigation } from "@react-navigation/native"
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { DrawerActions } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import IconProfileOn from '../assets/icon_profile_on.png';
+import IconProfileOff from '../assets/icon_profile_off.png';
+import IconCategoryOn from '../assets/icon_category_on.png';
+import IconCategoryOff from '../assets/icon_category_off.png';
+import LogoImage from '../assets/logo_umamono.png';
+import CategoryScreen from './Category';
 
-const Profile = ({ route }) => {
+
+const Tab = createBottomTabNavigator();
+
+const ProfileScreen = ({ route }) => {
     const user = firebase.auth().currentUser;
     const [image, setImage] = useState(null);
     const [name, setName] = useState('')
@@ -87,7 +97,51 @@ const Profile = ({ route }) => {
     );
 };
 
-export default Profile;
+const TabBarCustomComponent = ({ state, descriptors, navigation }) => {
+    return (
+      <View style={{ flexDirection: 'row', height: 60, justifyContent: 'space-around', alignItems: 'center' }}>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('CategoryScreen')}
+          style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 40 }}
+        >
+          <Image source={state.index === 0 ? IconCategoryOn : IconCategoryOff} style={{ width: 30, height: 30 }} />
+          <Text>카테고리</Text>
+        </TouchableOpacity>
+    
+        <TouchableOpacity
+          style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'center', marginTop: -15, paddingHorizontal: 0 }}
+          >
+          <Image source={LogoImage} style={{ width: 60, height: 60 }} />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => navigation.navigate('ProfileScreen')}
+          style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 40 }}
+        >
+          <Image source={state.index === 1 ? IconProfileOn : IconProfileOff} style={{ width: 33, height: 30 }} />
+          <Text>마이페이지</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
+  const TabNavigator = () => {
+    return (
+      <Tab.Navigator tabBar={(props) => <TabBarCustomComponent {...props} />}>
+        <Tab.Screen
+          name="CategoryScreen"
+          component={CategoryScreen}
+        />
+        <Tab.Screen
+          name="ProfileScreen"
+          component={ProfileScreen}
+        />
+      </Tab.Navigator>
+    );
+  };
+
+export default TabNavigator;
+  
 
 const styles = StyleSheet.create({
     container: {
