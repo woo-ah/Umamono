@@ -127,7 +127,11 @@ const TabBarCustomComponent = ({ state, descriptors, navigation }) => {
 
   const TabNavigator = () => {
     return (
-      <Tab.Navigator tabBar={(props) => <TabBarCustomComponent {...props} />}>
+      <Tab.Navigator
+        tabBar={(props) => <TabBarCustomComponent {...props} />}
+        screenOptions={{
+            headerShown: false, 
+        }}>
         <Tab.Screen
           name="CategoryScreen"
           component={CategoryScreen}
