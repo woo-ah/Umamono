@@ -32,6 +32,11 @@ const ConvienceStore = () => {
       (searchKeyword === '' || item.id.toLowerCase().includes(searchKeyword.toLowerCase()))
   );
 
+  const itemsInRows = [];
+  for (let i = 0; i < filteredItems.length; i += 3) {
+    itemsInRows.push(filteredItems.slice(i, i + 3));
+  }
+
   // return (
   //   <View style={styles.container}>
   //     <Text style={styles.title}>FamilyMart</Text>
@@ -67,14 +72,19 @@ const ConvienceStore = () => {
             </View>
         </View>
    
-        {filteredItems.map((item, index) => (
-        <TouchableOpacity key={index} onPress={() => handleItemPress(item.id)}>
-          <View key={index}>
-            <Image source={{ uri: item.url }} style={styles.image} />
-            <Text style={styles.text}>{item.id}</Text>
+        {itemsInRows.map((row, rowIndex) => (
+          <View key={rowIndex} style={styles.rowContainer}>
+            {row.map((item, colIndex) => (
+              <TouchableOpacity key={colIndex} onPress={() => handleItemPress(item.id)}>
+                <View style={styles.gridItem}>
+                  <View style={styles.imageContainer}>
+                    <Image source={{ uri: item.url }} style={styles.image} />
+                  </View>
+                  <Text style={styles.text}>{item.id}</Text>
+                </View>
+              </TouchableOpacity>
+            ))}
           </View>
-         </TouchableOpacity>
-        
         ))}
       </View>
     </ScrollView>
@@ -86,7 +96,7 @@ const ConvienceStore = () => {
 const styles = StyleSheet.create({
   container:{
       flex: 1, 
-      backgroundColor: '#fff',
+      backgroundColor: '#f1f1f1',
       
   },
   title:{
@@ -105,11 +115,25 @@ const styles = StyleSheet.create({
   image: {
     width: 100,
     height: 100,
-    alignSelf: 'center',
-    marginVertical: 10,
-    borderRadius:20,
-    marginBottom:10,
+    borderRadius: 20,
+    overflow: 'hidden',
+  },
+  imageContainer: {
+    width: 100,
+    height: 100,
+    borderRadius: 20,
+    overflow: 'hidden',
+    marginBottom: 10,
     marginTop: 10,
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 3.84,
+    elevation: 3,
   },
   searchContainer: {
     flexDirection: 'row',
@@ -139,7 +163,19 @@ const styles = StyleSheet.create({
   },
   header:{
     backgroundColor: '#FF7373'
-  }
+  },
+  gridContainer: {
+    marginBottom: 10,
+  },
+  rowContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 10,
+  },
+  gridItem: {
+    flex: 1,
+    alignItems: 'center',
+  },
 })
 
 export default ConvienceStore
