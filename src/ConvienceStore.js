@@ -41,24 +41,6 @@ const ConvienceStore = () => {
     itemsInRows.push(filteredItems.slice(i, i + 3));
   }
 
-  // return (
-  //   <View style={styles.container}>
-  //     <Text style={styles.title}>FamilyMart</Text>
-  //     {todoDate.map((item, index) => {
-  //       return (
-  //         <TouchableOpacity key={index} onPress={() => handleItemPress(item.id)}>
-  //           <View>
-  //           <Image source={{ uri: item.url }} style={styles.image} />
-  //             <Text style={styles.text}>{item.id}</Text>
-
-              
-  //           </View>
-  //         </TouchableOpacity>
-  //       );
-  //     })}
-  //   </View>
-  // );
-
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
