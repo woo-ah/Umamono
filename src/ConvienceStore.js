@@ -4,14 +4,18 @@ import { db } from '../config';
 import { ref, onValue } from 'firebase/database';
 import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
+import { useRoute } from '@react-navigation/native';
 
 const ConvienceStore = () => {
   const [todoDate, setTodoDate] = useState([]);
   const navigation = useNavigation();
   const [searchKeyword, setSearchKeyword] = useState('');
+  const route = useRoute();
+  const { store } = route.params;
 
   useEffect(() => {
-    const starCountRef = ref(db, 'ConvenienceStore/FamilyMart/Category/');
+    const starCountRef = ref(db, 'ConvenienceStore/' + store + '/Category/');
+
 
     onValue(starCountRef, (snapshot) => {
       const data = snapshot.val();
@@ -24,7 +28,7 @@ const ConvienceStore = () => {
   }, []);
 
   const handleItemPress = (itemId) => {
-    navigation.navigate('FoodDetail', { itemId });
+    navigation.navigate('FoodDetail', { itemId, store });
   };
 
   const filteredItems = todoDate.filter(
@@ -60,7 +64,7 @@ const ConvienceStore = () => {
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
         <View style={styles.header}>
-            <Text style={styles.title}>FamilyMart</Text>
+            <Text style={styles.title}>{store}</Text>
             <View style={styles.searchContainer}>
             <Feather name="search" size={24} color="black" style={styles.searchIcon} />
             <TextInput

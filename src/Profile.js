@@ -99,7 +99,7 @@ const ProfileScreen = ({ route }) => {
 
 const TabBarCustomComponent = ({ state, descriptors, navigation }) => {
     return (
-      <View style={{ flexDirection: 'row', height: 60, justifyContent: 'space-around', alignItems: 'center' }}>
+      <View style={{ flexDirection: 'row', height: 90, justifyContent: 'space-around', alignItems: 'center' }}>
         <TouchableOpacity
           onPress={() => navigation.navigate('CategoryScreen')}
           style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 40 }}

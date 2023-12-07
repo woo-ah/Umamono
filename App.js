@@ -13,6 +13,7 @@ import 'expo-dev-client';
 import ProfileUpdate from "./src/ProfileUpdate";
 import ConvienceStore from "./src/ConvienceStore";
 import FoodDetail from "./src/FoodDetail";
+import Food from "./src/Food";
 
 const Stack = createStackNavigator();
 
@@ -126,6 +127,12 @@ function App(){
     <Stack.Screen
       name="FoodDetail"
       component={FoodDetail}
+      options={{ headerShown: false }}
+    />
+
+    <Stack.Screen
+      name="Food"
+      component={Food}
       options={{ headerShown: false }}
     />
 

@@ -1,9 +1,16 @@
-"Category.js"
-
 import React from 'react';
-import { View, Image, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Image, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const Category = () => {
+
+  const navigation = useNavigation();
+
+  const handlePress = (storeName) => {
+    // Navigate to ConvenienceStore screen and pass the storeName as a parameter
+    navigation.navigate('ConvienceStore', { store: storeName });
+  };
+  
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -17,13 +24,14 @@ const Category = () => {
             resizeMode="cover"
           />
         </View>
-        <View style={styles.categoryItem}>
+        <TouchableOpacity style={styles.categoryItem} onPress={() => handlePress('FamilyMart')}>
           <Image
             style={styles.categoryImage}
             source={require('../assets/store_familymart.png')}
             resizeMode="cover"
           />
-        </View>
+        </TouchableOpacity>
+        
         <View style={styles.categoryItem}>
           <Image
             style={styles.categoryImage}
@@ -31,13 +39,15 @@ const Category = () => {
             resizeMode="cover"
           />
         </View>
-        <View style={styles.categoryItem}>
+
+        <TouchableOpacity style={styles.categoryItem} onPress={() => handlePress('LAWSON')}>
           <Image
             style={styles.categoryImage}
             source={require('../assets/store_lawson.png')}
             resizeMode="cover"
           />
-        </View>
+        </TouchableOpacity>
+
       </ScrollView>
     </View>
   );
